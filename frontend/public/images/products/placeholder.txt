@@ -1,0 +1,11 @@
+# Placeholder untuk gambar produk
+# Upload gambar asli dengan nama file berikut:
+
+ayam-ungkep-1kg.jpg
+ayam-ungkep-05kg.jpg
+lele-fresh-1kg.jpg
+lele-fresh-05kg.jpg
+lele-marinasi-1kg.jpg
+lele-marinasi-05kg.jpg
+telur-1kg.jpg
+minyak-1liter.jpg

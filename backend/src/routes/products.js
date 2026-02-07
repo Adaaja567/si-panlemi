@@ -4,14 +4,16 @@ const Product = require('../models/Product');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const products = await Product.find().sort({ createdAt: -1 });
-  res.json(products);
-});
+  try {
+    const items = await Product.find({
+      $or: [{ isActive: true }, { isActive: { $exists: false } }],
+    }).sort({ createdAt: -1 });
 
-router.get('/:id', async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  if (!product) return res.status(404).json({ message: 'Produk tidak ditemukan' });
-  res.json(product);
+    return res.json(items);
+  } catch (err) {
+    console.error('GET /api/products error:', err);
+    return res.status(500).json({ message: 'Gagal mengambil produk' });
+  }
 });
 
 module.exports = router;

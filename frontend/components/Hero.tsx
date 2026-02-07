@@ -1,24 +1,37 @@
-import React from 'react';
-import WhatsAppButton from './WhatsAppButton';
+import HeroProductSlider from "./HeroProductSlider";
+import React from "react";
+import WhatsAppButton from "./WhatsAppButton";
 
-const WA_PHONE = '6281234567890'; // ganti nomor WA
+const WA_PHONE = "6289532642246"; // Nomor WA Ngendok Farm
 
 const Hero: React.FC = () => {
   const message =
-    'Halo Ngendok_Farm, saya tertarik dengan produk ayam ungkep, lele, telur, dan minyak. Mohon info lebih lanjut.';
+    "Halo Ngendok_Farm, saya tertarik dengan produk ayam ungkep, lele, telur, dan minyak. Mohon info lebih lanjut.";
 
   return (
-    <section className="bg-orange-50">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 py-10 md:flex-row md:py-16">
+    // Section hero utama
+    <section id="beranda" className="bg-[#FFF7EC] scroll-mt-24">
+      <div
+        className="
+          mx-auto flex max-w-6xl flex-col items-center gap-8
+          px-4 py-10 md:flex-row md:py-16
+          min-h-[calc(100vh-72px)]
+        "
+      >
+        {/* KIRI */}
         <div className="w-full md:w-1/2">
           <h1 className="text-2xl font-extrabold text-gray-900 sm:text-3xl md:text-4xl">
-            Bahan Masakan Rumahan – Fresh, Halal, Siap Goreng.
+            Serasa punya asisten dapur pribadi yang selalu siap, tanpa harus membayar
+            gaji setiap bulan.
           </h1>
           <p className="mt-3 text-sm text-gray-700 sm:text-base">
-            Ayam ungkep bumbu rumahan, lele fresh & marinasi, telur, dan
-            minyak goreng untuk dapur dan usaha kuliner rumahan Anda. Praktis,
-            higienis, dan terjangkau.
+            Telur, ayam ungkep, lele fresh dan marinasi, serta minyak goreng kami
+            siapkan dalam kondisi bersih, higienis, dan siap olah. Ibu tidak perlu lagi
+            repot belanja, membersihkan bahan, memotong, dan mengulek bumbu dari awal.
+            Tinggal menyalakan kompor dan mengolah sebentar, lauk hangat sudah siap
+            disajikan untuk keluarga di rumah maupun pelanggan usaha makanan rumahan.
           </p>
+
           <div className="mt-5 flex flex-col gap-2 sm:flex-row">
             <a
               href="#produk"
@@ -29,29 +42,23 @@ const Hero: React.FC = () => {
             <WhatsAppButton
               phone={WA_PHONE}
               message={message}
-              className="sm:w-auto w-full"
+              className="w-full sm:w-auto"
             />
           </div>
         </div>
-        <div className="w-full md:w-1/2">
-          <div className="relative h-56 w-full rounded-2xl bg-white shadow md:h-72">
-            <div className="absolute inset-4 flex flex-wrap items-center justify-center gap-3 text-xs text-gray-700">
-              <div className="rounded-xl bg-orange-100 px-3 py-2">
-                Ayam Ungkep
-              </div>
-              <div className="rounded-xl bg-green-100 px-3 py-2">
-                Lele Fresh
-              </div>
-              <div className="rounded-xl bg-red-100 px-3 py-2">
-                Lele Marinasi Pedas
-              </div>
-              <div className="rounded-xl bg-yellow-100 px-3 py-2">
-                Telur Ayam
-              </div>
-              <div className="rounded-xl bg-amber-100 px-3 py-2">
-                Minyak Goreng
-              </div>
-            </div>
+
+        {/* KANAN: slider (dibesarkan) */}
+        <div className="w-full md:w-1/2 flex justify-center md:justify-end">
+          <div
+            className="
+      relative h-72 w-full max-w-[520px]
+      overflow-hidden rounded-3xl
+      border-[5px] border-orange-400
+      shadow-sm
+      md:h-80
+    "
+          >
+            <HeroProductSlider />
           </div>
         </div>
       </div>

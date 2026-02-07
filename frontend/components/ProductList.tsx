@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ProductCard from './ProductCard';
 import { Product } from '@/lib/types';
 import { fetchProducts } from '@/lib/api';
@@ -14,7 +14,17 @@ const categories = [
   { key: 'minyak', label: 'Minyak' },
 ];
 
-const WA_PHONE = '6281234567890'; // ganti dengan nomor WA asli
+// samakan format kategori dari DB -> key filter
+function normalizeCategory(input: any): string {
+  const s = String(input || '').trim().toLowerCase();
+
+  // dukung beberapa variasi umum
+  if (s === 'lele fresh' || s === 'lele-fresh') return 'lele_fresh';
+  if (s === 'lele marinasi' || s === 'lele-marinasi') return 'lele_marinasi';
+
+  // default: spasi jadi underscore
+  return s.replace(/\s+/g, '_');
+}
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -25,9 +35,10 @@ const ProductList: React.FC = () => {
     const load = async () => {
       try {
         const data = await fetchProducts();
-        setProducts(data);
+        setProducts(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error(err);
+        setProducts([]);
       } finally {
         setLoading(false);
       }
@@ -35,18 +46,22 @@ const ProductList: React.FC = () => {
     load();
   }, []);
 
-  const filtered =
-    activeCategory === 'all'
-      ? products
-      : products.filter((p) => p.category === activeCategory);
+  const filtered = useMemo(() => {
+    if (activeCategory === 'all') return products;
+    return products.filter((p) => normalizeCategory((p as any).category) === activeCategory);
+  }, [products, activeCategory]);
 
   if (loading) {
-    return <p className="text-center text-gray-500">Memuat produk...</p>;
+    return (
+      <section id="produk" className="bg-orange-50 py-12 scroll-mt-24">
+        <p className="text-center text-gray-500">Memuat produk...</p>
+      </section>
+    );
   }
 
   return (
-    <section id="produk" className="py-10 bg-orange-50">
-      <div className="mx-auto max-w-6xl px-4">
+    <section id="produk" className="bg-orange-50 py-12 sm:py-16 scroll-mt-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
           Daftar Produk Ngendok_Farm
         </h2>
@@ -59,27 +74,23 @@ const ProductList: React.FC = () => {
             <button
               key={cat.key}
               onClick={() => setActiveCategory(cat.key)}
-              className={`rounded-full px-3 py-1 text-sm border ${
-                activeCategory === cat.key
-                  ? 'bg-orange-500 text-white border-orange-500'
-                  : 'bg-white text-gray-700 border-gray-300'
-              }`}
+              className={`rounded-full px-4 py-2 text-sm border transition-all ${activeCategory === cat.key
+                ? 'bg-orange-500 text-white border-orange-500 shadow-md'
+                : 'bg-white text-gray-700 border-gray-300 hover:border-orange-300 hover:bg-orange-50'
+                }`}
             >
               {cat.label}
             </button>
           ))}
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-8 grid gap-4 sm:gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {filtered.map((product) => (
-            <ProductCard
-              key={product._id}
-              product={product}
-              waPhone={WA_PHONE}
-            />
+            <ProductCard key={(product as any)._id} product={product} />
           ))}
+
           {filtered.length === 0 && (
-            <p className="col-span-full text-center text-gray-500">
+            <p className="col-span-full text-center text-gray-500 py-8">
               Belum ada produk di kategori ini.
             </p>
           )}

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 const AdminLoginForm: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -30,10 +30,10 @@ const AdminLoginForm: React.FC = () => {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || 'Login gagal');
+        throw new Error((data as any).message || 'Login gagal');
       }
 
-      window.location.href = '/admin/produk';
+      window.location.href = '/dashboard/orders';
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -42,16 +42,9 @@ const AdminLoginForm: React.FC = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mx-auto mt-10 max-w-sm rounded-xl bg-white p-6 shadow"
-    >
-      <h1 className="text-lg font-bold text-gray-900">
-        Login Admin SI PANLEMI
-      </h1>
-      <p className="mt-1 text-sm text-gray-600">
-        Masuk untuk mengelola produk Ngendok_Farm.
-      </p>
+    <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-sm rounded-xl bg-white p-6 shadow">
+      <h1 className="text-lg font-bold text-gray-900">Login Admin SI PANLEMI</h1>
+      <p className="mt-1 text-sm text-gray-600">Masuk untuk mengelola produk Ngendok_Farm.</p>
 
       {error && (
         <p className="mt-3 rounded bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -60,9 +53,7 @@ const AdminLoginForm: React.FC = () => {
       )}
 
       <div className="mt-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Username
-        </label>
+        <label className="block text-sm font-medium text-gray-700">Username</label>
         <input
           type="text"
           className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
@@ -73,9 +64,7 @@ const AdminLoginForm: React.FC = () => {
       </div>
 
       <div className="mt-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Password
-        </label>
+        <label className="block text-sm font-medium text-gray-700">Password</label>
         <input
           type="password"
           className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"

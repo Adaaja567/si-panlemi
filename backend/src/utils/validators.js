@@ -8,7 +8,7 @@ const loginValidator = [
 const productValidator = [
   body('name').isString().notEmpty().withMessage('Nama produk wajib diisi'),
   body('category')
-    .isIn(['ayam', 'lele_fresh', 'lele_marinasi', 'telur', 'minyak'])
+    .isIn(['ayam', 'lele_fresh', 'lele_marinasi', 'telur', 'minyak goreng'])
     .withMessage('Kategori tidak valid'),
   body('price').isNumeric().withMessage('Harga harus angka'),
   body('unit').isString().notEmpty().withMessage('Satuan wajib diisi'),

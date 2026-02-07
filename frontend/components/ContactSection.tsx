@@ -9,7 +9,7 @@ const ContactSection: React.FC = () => {
           Hubungi kami untuk pemesanan dan informasi lebih lanjut.
         </p>
         <div className="mt-4 space-y-2 text-sm text-gray-700">
-          <p>WhatsApp: 08xx-xxxx-xxxx</p>
+          <p>WhatsApp: 0895-3264-22463</p>
           <p>Alamat: Perumahan X, Blok Y, Kota Z</p>
           <p>Jam operasional: 06.00 – 20.00</p>
         </div>
