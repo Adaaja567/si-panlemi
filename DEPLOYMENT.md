@@ -49,14 +49,15 @@ NODE_ENV=production
 FRONTEND_ORIGIN=https://your-frontend-url.vercel.app
 MONGODB_URI=mongodb+srv://UIk7kzCvG6JuzKdn:UIk7kzCvG6JuzKdn@ngendok-farm-cluster.xe83c7w.mongodb.net/ngendok-farm?retryWrites=true&w=majority&appName=ngendok-farm-cluster
 JWT_SECRET=e9d72cc89d3d87653851d872fd6a6e98ada60562ffbe6ff2c2844bec2ec20a67
-ADMIN_DEFAULT_ROLE=super_admin
-ADMIN_DEFAULT_USERNAME=superadmin
-ADMIN_DEFAULT_PASSWORD=e9d72cc89d3d87653851d872fd6a6e98ada60562ffbe6ff2c2844bec2ec20a67
 STORE_LAT=-6.727475111
 STORE_LNG=111.331513
 MAX_FREE_DELIVERY_KM=3
 MAX_FILE_SIZE=5242880
 ```
+
+**Catatan:** Admin sudah ada di database MongoDB dengan:
+- Username: `superadmin`
+- Password: `SuperAdmin2026`
 
 ### 3. Deploy
 - Klik **Deploy**
