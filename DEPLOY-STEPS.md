@@ -6,19 +6,27 @@
 2. Import repository: `Adaaja567/si-panlemi`
 3. **Root Directory**: Pilih `backend`
 4. **Framework Preset**: Other
-5. Tambahkan Environment Variables (copy paste semua):
+5. **Environment Variables**: 
 
-```
-PORT=4000
-NODE_ENV=production
-FRONTEND_ORIGIN=https://NANTI-DIISI-SETELAH-FRONTEND-DEPLOY.vercel.app
-MONGODB_URI=mongodb+srv://UIk7kzCvG6JuzKdn:UIk7kzCvG6JuzKdn@ngendok-farm-cluster.xe83c7w.mongodb.net/ngendok-farm?retryWrites=true&w=majority&appName=ngendok-farm-cluster
-JWT_SECRET=e9d72cc89d3d87653851d872fd6a6e98ada60562ffbe6ff2c2844bec2ec20a67
-STORE_LAT=-6.727475111
-STORE_LNG=111.331513
-MAX_FREE_DELIVERY_KM=3
-MAX_FILE_SIZE=5242880
-```
+   **CARA 1 - Input Manual (Recommended):**
+   
+   Klik "Add" untuk setiap variabel dan masukkan satu per satu:
+   
+   | Name | Value |
+   |------|-------|
+   | `PORT` | `4000` |
+   | `NODE_ENV` | `production` |
+   | `FRONTEND_ORIGIN` | `https://NANTI-DIISI-SETELAH-FRONTEND-DEPLOY.vercel.app` |
+   | `MONGODB_URI` | `mongodb+srv://UIk7kzCvG6JuzKdn:UIk7kzCvG6JuzKdn@ngendok-farm-cluster.xe83c7w.mongodb.net/ngendok-farm?retryWrites=true&w=majority&appName=ngendok-farm-cluster` |
+   | `JWT_SECRET` | `e9d72cc89d3d87653851d872fd6a6e98ada60562ffbe6ff2c2844bec2ec20a67` |
+   | `STORE_LAT` | `-6.727475111` |
+   | `STORE_LNG` | `111.331513` |
+   | `MAX_FREE_DELIVERY_KM` | `3` |
+   | `MAX_FILE_SIZE` | `5242880` |
+
+   **CARA 2 - Copy Paste dari File:**
+   
+   Buka file `VERCEL-ENV-BACKEND.txt` di project, copy semua isinya, lalu paste di Vercel (ada tombol untuk paste multiple variables).
 
 6. Klik **Deploy**
 7. **COPY URL BACKEND** (contoh: `https://si-panlemi-backend.vercel.app`)
@@ -31,13 +39,17 @@ MAX_FILE_SIZE=5242880
 2. Import repository yang sama: `Adaaja567/si-panlemi`
 3. **Root Directory**: Pilih `frontend`
 4. **Framework Preset**: Next.js
-5. Tambahkan Environment Variable:
+5. **Environment Variables**:
 
-```
-NEXT_PUBLIC_API_URL=https://PASTE-URL-BACKEND-DISINI
-```
+   Tambahkan 1 variabel:
+   
+   | Name | Value |
+   |------|-------|
+   | `NEXT_PUBLIC_API_URL` | `https://PASTE-URL-BACKEND-DISINI` |
 
-**⚠️ GANTI** `https://PASTE-URL-BACKEND-DISINI` dengan URL backend dari Step 1!
+   **⚠️ GANTI** `https://PASTE-URL-BACKEND-DISINI` dengan URL backend dari Step 1!
+   
+   Contoh: `https://si-panlemi-backend.vercel.app`
 
 6. Klik **Deploy**
 7. **COPY URL FRONTEND** (contoh: `https://si-panlemi.vercel.app`)
