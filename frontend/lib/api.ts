@@ -6,6 +6,26 @@ import type { Product } from '@/lib/types';
 // API Configuration
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
+// Helper function to get admin token from localStorage
+function getAdminToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('adminToken');
+}
+
+// Helper function to get headers with admin token
+function getAuthHeaders(): HeadersInit {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+  
+  const token = getAdminToken();
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
+  return headers;
+}
+
 // Helper function to safely parse JSON responses
 async function parseJsonSafe(res: Response) {
   try {
@@ -203,8 +223,18 @@ export interface AdminLoginResponse {
 }
 
 export async function adminMe(): Promise<AdminLoginResponse> {
+  const token = getAdminToken();
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${API_URL}/api/auth/me`, {
     credentials: 'include',
+    headers,
   });
 
   const data = await parseJsonSafe(res);
@@ -224,6 +254,11 @@ export async function adminLogin(payload: AdminLoginPayload): Promise<AdminLogin
   const data = await parseJsonSafe(res);
   if (!res.ok) throw new Error((data as any).message || 'Gagal login admin');
 
+  // Save token to localStorage if available
+  if (data.token) {
+    localStorage.setItem('adminToken', data.token);
+  }
+
   return data as AdminLoginResponse;
 }
 
@@ -242,6 +277,7 @@ export async function adminLogout() {
 export async function fetchAdminOrders() {
   const res = await fetch(`${API_URL}/api/admin/orders`, {
     credentials: 'include',
+    headers: getAuthHeaders(),
   });
 
   const data = await parseJsonSafe(res);
@@ -253,7 +289,7 @@ export async function fetchAdminOrders() {
 export async function updateAdminOrderStatus(orderId: string, status: string) {
   const res = await fetch(`${API_URL}/api/admin/orders/${orderId}/status`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     credentials: 'include',
     body: JSON.stringify({ status }),
   });
@@ -267,7 +303,7 @@ export async function updateAdminOrderStatus(orderId: string, status: string) {
 export async function verifyPaymentProof(orderId: string, status: 'approved' | 'rejected') {
   const res = await fetch(`${API_URL}/api/admin/orders/${orderId}/payment/verify`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     credentials: 'include',
     body: JSON.stringify({ status }),
   });
@@ -282,6 +318,7 @@ export async function verifyPaymentProof(orderId: string, status: 'approved' | '
 export async function fetchAdminProducts() {
   const res = await fetch(`${API_URL}/api/admin/products`, {
     credentials: 'include',
+    headers: getAuthHeaders(),
   });
 
   const data = await parseJsonSafe(res);
@@ -293,7 +330,7 @@ export async function fetchAdminProducts() {
 export async function createAdminProduct(payload: Omit<Product, '_id' | 'createdAt' | 'updatedAt'>) {
   const res = await fetch(`${API_URL}/api/admin/products`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     credentials: 'include',
     body: JSON.stringify(payload),
   });
@@ -307,7 +344,7 @@ export async function createAdminProduct(payload: Omit<Product, '_id' | 'created
 export async function updateAdminProduct(id: string, payload: Partial<Product>) {
   const res = await fetch(`${API_URL}/api/admin/products/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     credentials: 'include',
     body: JSON.stringify(payload),
   });
@@ -322,6 +359,7 @@ export async function deleteAdminProduct(id: string) {
   const res = await fetch(`${API_URL}/api/admin/products/${id}`, {
     method: 'DELETE',
     credentials: 'include',
+    headers: getAuthHeaders(),
   });
 
   const data = await parseJsonSafe(res);
@@ -335,9 +373,16 @@ export async function uploadProductImage(file: File) {
   const formData = new FormData();
   formData.append('image', file);
 
+  const token = getAdminToken();
+  const headers: HeadersInit = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${API_URL}/api/upload/product`, {
     method: 'POST',
     credentials: 'include',
+    headers,
     body: formData,
   });
 
@@ -351,6 +396,7 @@ export async function deleteProductImage(filename: string) {
   const res = await fetch(`${API_URL}/api/upload/product/${filename}`, {
     method: 'DELETE',
     credentials: 'include',
+    headers: getAuthHeaders(),
   });
 
   const data = await parseJsonSafe(res);
@@ -390,6 +436,7 @@ export async function verifyPasswordReset(phone: string, verificationCode: strin
 export async function fetchStockNotifications() {
   const res = await fetch(`${API_URL}/api/stock/notifications`, {
     credentials: 'include',
+    headers: getAuthHeaders(),
   });
 
   const data = await parseJsonSafe(res);
@@ -401,7 +448,7 @@ export async function fetchStockNotifications() {
 export async function restockProduct(productId: string, quantity: number, action: 'add' | 'set' = 'add') {
   const res = await fetch(`${API_URL}/api/stock/restock/${productId}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     credentials: 'include',
     body: JSON.stringify({ quantity, action }),
   });
@@ -415,6 +462,7 @@ export async function restockProduct(productId: string, quantity: number, action
 export async function fetchStockSummary() {
   const res = await fetch(`${API_URL}/api/stock/summary`, {
     credentials: 'include',
+    headers: getAuthHeaders(),
   });
 
   const data = await parseJsonSafe(res);
@@ -427,7 +475,7 @@ export async function fetchStockSummary() {
 export async function fetchSuperAdminAnalytics(days = 30) {
   const res = await fetch(
     `${API_URL}/api/super-admin/analytics?days=${encodeURIComponent(String(days))}`,
-    { credentials: 'include' }
+    { credentials: 'include', headers: getAuthHeaders() }
   );
 
   const data = await parseJsonSafe(res);
@@ -440,6 +488,7 @@ export async function fetchSuperAdminAnalytics(days = 30) {
 export async function fetchSuperAdminAdmins() {
   const res = await fetch(`${API_URL}/api/super-admin/admins`, {
     credentials: 'include',
+    headers: getAuthHeaders(),
   });
 
   const data = await parseJsonSafe(res);
@@ -455,7 +504,7 @@ export async function createSuperAdminAdmin(payload: {
 }) {
   const res = await fetch(`${API_URL}/api/super-admin/admins`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     credentials: 'include',
     body: JSON.stringify(payload),
   });
@@ -472,7 +521,7 @@ export async function updateSuperAdminAdmin(
 ) {
   const res = await fetch(`${API_URL}/api/super-admin/admins/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     credentials: 'include',
     body: JSON.stringify(payload),
   });
@@ -487,6 +536,7 @@ export async function deleteSuperAdminAdmin(id: string) {
   const res = await fetch(`${API_URL}/api/super-admin/admins/${id}`, {
     method: 'DELETE',
     credentials: 'include',
+    headers: getAuthHeaders(),
   });
 
   const data = await parseJsonSafe(res);
@@ -499,6 +549,7 @@ export async function deleteSuperAdminAdmin(id: string) {
 export async function fetchSuperAdminUsers() {
   const res = await fetch(`${API_URL}/api/super-admin/users`, {
     credentials: 'include',
+    headers: getAuthHeaders(),
   });
 
   const data = await parseJsonSafe(res);
@@ -510,7 +561,7 @@ export async function fetchSuperAdminUsers() {
 export async function setSuperAdminUserActive(id: string, isActive: boolean) {
   const res = await fetch(`${API_URL}/api/super-admin/users/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     credentials: 'include',
     body: JSON.stringify({ isActive }),
   });
