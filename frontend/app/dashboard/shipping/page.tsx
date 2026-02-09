@@ -24,4 +24,4 @@ const formatPrice = (value: number) =>
 export default function ShippingSettingsPage() {
   const [settings, setSettings] = useState<ShippingSetting[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]
+  const [error, setError] = useState<string | null>(null);
