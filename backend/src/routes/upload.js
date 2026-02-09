@@ -12,8 +12,9 @@ const PRODUCTS_DIR = path.join(UPLOADS_DIR, 'products');
 const PROOFS_DIR = path.join(UPLOADS_DIR, 'payment-proofs');
 
 // Buat folder jika belum ada
-fs.mkdirSync(PRODUCTS_DIR, { recursive: true });
-fs.mkdirSync(PROOFS_DIR, { recursive: true });
+// Comment untuk Vercel - filesystem read-only
+// fs.mkdirSync(PRODUCTS_DIR, { recursive: true });
+// fs.mkdirSync(PROOFS_DIR, { recursive: true });
 
 // Konfigurasi multer untuk foto produk
 const productStorage = multer.diskStorage({

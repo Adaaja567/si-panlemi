@@ -32,7 +32,8 @@ async function getLoggedInUserIfAny(req) {
 
 // Upload config (local)
 const UPLOAD_DIR = path.join(__dirname, '..', '..', 'uploads', 'payment-proofs');
-fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+// Comment untuk Vercel - filesystem read-only
+// fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, UPLOAD_DIR),

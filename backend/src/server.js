@@ -38,8 +38,9 @@ connectDB(process.env.MONGODB_URI);
 const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
 const PRODUCTS_DIR = path.join(UPLOADS_DIR, 'products');
 const PROOFS_DIR = path.join(UPLOADS_DIR, 'payment-proofs');
-fs.mkdirSync(PRODUCTS_DIR, { recursive: true });
-fs.mkdirSync(PROOFS_DIR, { recursive: true });
+// Comment untuk Vercel - filesystem read-only
+// fs.mkdirSync(PRODUCTS_DIR, { recursive: true });
+// fs.mkdirSync(PROOFS_DIR, { recursive: true });
 
 // Static files untuk akses bukti transfer
 // contoh URL: http://localhost:4000/uploads/payment-proofs/xxx.webp
