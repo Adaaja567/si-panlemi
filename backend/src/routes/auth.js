@@ -62,6 +62,7 @@ router.post('/login', loginValidator, validateRequest, async (req, res) => {
 
     return res.json({
       message: 'Login berhasil',
+      token: token, // ✅ Kirim token di response body untuk frontend
       user: {
         id: String(admin._id),
         role: admin.role || 'admin',
