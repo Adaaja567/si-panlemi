@@ -3,10 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { userLogin } from "@/lib/api";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isFromRegistration = searchParams.get('registered') === 'true';
@@ -230,5 +230,13 @@ function EyeOffIcon() {
         strokeLinejoin="round"
       />
     </svg>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-emerald-100 via-green-100 to-lime-100 flex items-center justify-center">Memuat...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }
